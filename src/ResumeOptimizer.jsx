@@ -111,7 +111,8 @@ export default function ResumeOptimizer() {
         {loading && (
           <div className="loading">
             <div className="spinner"></div>
-            <p>Processing your resume...</p>
+            <p className="loading-text">Analyzing your resume...</p>
+            <p className="loading-subtext">Matching keywords against the job description</p>
           </div>
         )}
 
@@ -122,43 +123,64 @@ export default function ResumeOptimizer() {
           </div>
         )}
 
-        {result && !loading && (
-          <div className="results">
-            <div className="score-section">
-              <h2>Match Score</h2>
-              <div className="score-display">
-                <span className="score-value">{result.score}%</span>
+        {result && !loading && (() => {
+          const score = result.score ?? 0;
+          const scoreLabel =
+            score >= 80 ? 'Excellent Match' :
+            score >= 60 ? 'Good Match' :
+            score >= 40 ? 'Fair Match' : 'Needs Improvement';
+          const scoreColor =
+            score >= 80 ? '#2e7d32' :
+            score >= 60 ? '#1565c0' :
+            score >= 40 ? '#e65100' : '#c62828';
+          const scoreBg =
+            score >= 80 ? 'linear-gradient(135deg, #43a047 0%, #2e7d32 100%)' :
+            score >= 60 ? 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)' :
+            score >= 40 ? 'linear-gradient(135deg, #fb8c00 0%, #e65100 100%)' :
+                          'linear-gradient(135deg, #e53935 0%, #c62828 100%)';
+          return (
+            <div className="results">
+              <div className="score-card" style={{ background: scoreBg }}>
+                <p className="score-label">{scoreLabel}</p>
+                <div className="score-circle">
+                  <span className="score-value">{score}%</span>
+                </div>
+                <p className="score-sublabel">keyword match rate</p>
               </div>
+
+              {result.matched_keywords && result.matched_keywords.length > 0 && (
+                <div className="keywords-section">
+                  <h3 className="section-title matched-title">
+                    <span className="section-icon">✓</span>
+                    Matched Keywords
+                    <span className="keyword-count">{result.matched_keywords.length}</span>
+                  </h3>
+                  <div className="keywords-list">
+                    {result.matched_keywords.map((keyword, index) => (
+                      <span key={index} className="keyword matched">✓ {keyword}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {result.missing_keywords && result.missing_keywords.length > 0 && (
+                <div className="keywords-section">
+                  <h3 className="section-title missing-title">
+                    <span className="section-icon">✗</span>
+                    Missing Keywords
+                    <span className="keyword-count missing-count">{result.missing_keywords.length}</span>
+                  </h3>
+                  <p className="missing-keywords-hint">Add these keywords to improve your match score:</p>
+                  <div className="keywords-list">
+                    {result.missing_keywords.map((keyword, index) => (
+                      <span key={index} className="keyword missing">+ {keyword}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-
-            {result.matched_keywords && result.matched_keywords.length > 0 && (
-              <div className="keywords-section">
-                <h3>Matched Keywords</h3>
-                <div className="keywords-list">
-                  {result.matched_keywords.map((keyword, index) => (
-                    <span key={index} className="keyword matched">
-                      ✓ {keyword}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {result.missing_keywords && result.missing_keywords.length > 0 && (
-              <div className="keywords-section">
-                <h3>Missing Keywords</h3>
-                <p className="missing-keywords-hint">Consider adding these keywords to your resume:</p>
-                <div className="keywords-list">
-                  {result.missing_keywords.map((keyword, index) => (
-                    <span key={index} className="keyword missing">
-                      + {keyword}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+          );
+        })()}
       </div>
     </div>
   );
