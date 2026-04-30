@@ -12,10 +12,22 @@ export default function ResumeOptimizer() {
     const file = e.target.files?.[0];
     if (file) {
       const validTypes = ['text/plain', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      
+      // Check file type
       if (!validTypes.includes(file.type)) {
-        setError('Please upload a valid file (.txt, .pdf, .docx)');
+        setError('Invalid file type. Please upload a .txt, .pdf, or .docx file.');
+        setResume(null);
         return;
       }
+
+      // Check file size (max 5MB)
+      const maxSizeMB = 5;
+      if (file.size > maxSizeMB * 1024 * 1024) {
+        setError(`File is too large. Maximum file size is ${maxSizeMB}MB.`);
+        setResume(null);
+        return;
+      }
+
       setResume(file);
       setError(null);
     }
@@ -23,42 +35,71 @@ export default function ResumeOptimizer() {
 
   const handleJobDescriptionChange = (e) => {
     setJobDescription(e.target.value);
+    // Clear error message when user starts typing
+    if (error?.includes('Job description')) {
+      setError(null);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation
     if (!resume) {
-      setError('Please upload a resume file');
+      setError('Resume file is required. Please upload a file to continue.');
       return;
     }
 
-    if (!jobDescription.trim()) {
-      setError('Please enter a job description');
+    const trimmedDescription = jobDescription.trim();
+    if (!trimmedDescription) {
+      setError('Job description is required. Please paste or type the job description.');
       return;
     }
 
-    setLoading(true);
+    if (trimmedDescription.length < 20) {
+      setError('Job description is too short. Please provide at least 20 characters.');
+      return;
+    }
+
+    // Clear previous results and errors when starting new analysis
+    setResult(null);
     setError(null);
+    setLoading(true);
 
     try {
       const formData = new FormData();
       formData.append('resume', resume);
-      formData.append('job_description', jobDescription);
+      formData.append('job_description', trimmedDescription);
 
       const response = await fetch('http://127.0.0.1:8000/analyze', {
         method: 'POST',
         body: formData,
+        signal: AbortSignal.timeout(30000), // 30 second timeout
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        if (response.status === 400) {
+          throw new Error('Invalid input. Please check your resume and job description format.');
+        } else if (response.status === 500) {
+          throw new Error('Server error. The backend encountered an issue. Please try again later.');
+        } else if (response.status === 503) {
+          throw new Error('Service unavailable. The backend server is currently down.');
+        } else {
+          throw new Error(`Server error (${response.status}). Please try again.`);
+        }
       }
 
       const data = await response.json();
       setResult(data);
     } catch (err) {
-      setError(err.message || 'Failed to analyze resume. Please check if the backend server is running.');
+      if (err.name === 'AbortError') {
+        setError('Request timeout. The server took too long to respond. Please try again.');
+      } else if (err instanceof TypeError) {
+        setError('Network error. Unable to connect to the server. Please check if the backend is running at http://127.0.0.1:8000');
+      } else {
+        setError(err.message || 'Failed to analyze resume. Please try again.');
+      }
+      setResult(null); // Clear any previous results on error
     } finally {
       setLoading(false);
     }
