@@ -310,32 +310,53 @@ h1 {
 .keywords-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
+  align-items: center;
 }
 
 .keyword {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 8px 14px;
   border-radius: 20px;
   font-size: 13px;
-  font-weight: 500;
-  transition: transform 0.2s ease;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: default;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .keyword:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 
 .keyword.matched {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border: 1.5px solid #66bb6a;
+  background-color: #c8e6c9;
+  color: #1b5e20;
+  border: 1px solid #81c784;
+  box-shadow: 0 2px 4px rgba(76, 175, 80, 0.15);
+}
+
+.keyword.matched:hover {
+  background-color: #a5d6a7;
+  border-color: #66bb6a;
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.25);
 }
 
 .keyword.missing {
-  background-color: #ffebee;
-  color: #c62828;
-  border: 1.5px solid #ef5350;
+  background-color: #ffcdd2;
+  color: #b71c1c;
+  border: 1px solid #ef5350;
+  box-shadow: 0 2px 4px rgba(244, 67, 54, 0.15);
+}
+
+.keyword.missing:hover {
+  background-color: #ffb3ba;
+  border-color: #f44336;
+  box-shadow: 0 4px 8px rgba(244, 67, 54, 0.25);
 }
 
 @media (max-width: 600px) {

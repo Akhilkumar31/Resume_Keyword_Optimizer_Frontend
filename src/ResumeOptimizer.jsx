@@ -198,7 +198,29 @@ export default function ResumeOptimizer() {
                   </h3>
                   <div className="keywords-list">
                     {result.matched_keywords.map((keyword, index) => (
-                      <span key={index} className="keyword matched">✓ {keyword}</span>
+                      <span
+                        key={index}
+                        className="keyword matched"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          backgroundColor: '#c8e6c9',
+                          color: '#1b5e20',
+                          border: '1px solid #81c784',
+                          borderRadius: '20px',
+                          padding: '8px 14px',
+                          fontSize: '13px',
+                          fontWeight: '600',
+                          boxShadow: '0 2px 4px rgba(76, 175, 80, 0.15)',
+                          transition: 'all 0.2s ease',
+                          cursor: 'default',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        <span style={{ fontSize: '14px' }}>✓</span>
+                        {keyword}
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -214,7 +236,29 @@ export default function ResumeOptimizer() {
                   <p className="missing-keywords-hint">Add these keywords to improve your match score:</p>
                   <div className="keywords-list">
                     {result.missing_keywords.map((keyword, index) => (
-                      <span key={index} className="keyword missing">+ {keyword}</span>
+                      <span
+                        key={index}
+                        className="keyword missing"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          backgroundColor: '#ffcdd2',
+                          color: '#b71c1c',
+                          border: '1px solid #ef5350',
+                          borderRadius: '20px',
+                          padding: '8px 14px',
+                          fontSize: '13px',
+                          fontWeight: '600',
+                          boxShadow: '0 2px 4px rgba(244, 67, 54, 0.15)',
+                          transition: 'all 0.2s ease',
+                          cursor: 'default',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        <span style={{ fontSize: '14px' }}>+</span>
+                        {keyword}
+                      </span>
                     ))}
                   </div>
                 </div>
