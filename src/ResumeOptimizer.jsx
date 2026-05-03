@@ -11,10 +11,23 @@ export default function ResumeOptimizer() {
   const handleResumeChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      const validTypes = ['text/plain', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-      
-      // Check file type
-      if (!validTypes.includes(file.type)) {
+      const validTypes = [
+        'text/plain',
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/zip', // Some browsers report .docx as application/zip
+      ];
+      const validExtensions = ['.txt', '.pdf', '.docx'];
+      const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+
+      // Check file type by MIME type OR extension (handles cross-browser MIME inconsistencies)
+      if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
+        setError('Invalid file type. Please upload a .txt, .pdf, or .docx file.');
+        setResume(null);
+        return;
+      }
+      // Block application/zip files that are NOT .docx by extension
+      if (file.type === 'application/zip' && fileExtension !== '.docx') {
         setError('Invalid file type. Please upload a .txt, .pdf, or .docx file.');
         setResume(null);
         return;
@@ -30,6 +43,7 @@ export default function ResumeOptimizer() {
 
       setResume(file);
       setError(null);
+      setResult(null); // Clear previous results when a new file is selected
     }
   };
 
