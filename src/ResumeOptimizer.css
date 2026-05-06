@@ -64,11 +64,29 @@ h1 {
   cursor: pointer;
 }
 
+.url-input-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.url-input {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.url-input:hover:not(:disabled),
 .file-input:hover:not(:disabled),
 .textarea:hover:not(:disabled) {
   border-color: #667eea;
 }
 
+.url-input:focus,
 .file-input:focus,
 .textarea:focus {
   outline: none;
@@ -76,6 +94,7 @@ h1 {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+.url-input:disabled,
 .file-input:disabled,
 .textarea:disabled,
 .button:disabled {
@@ -84,10 +103,38 @@ h1 {
   opacity: 0.7;
 }
 
+.url-input:disabled:hover,
 .file-input:disabled:hover,
 .textarea:disabled:hover {
   border-color: #e0e0e0;
   cursor: wait;
+}
+
+.fetch-button {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.fetch-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.fetch-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.fetch-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .file-name {

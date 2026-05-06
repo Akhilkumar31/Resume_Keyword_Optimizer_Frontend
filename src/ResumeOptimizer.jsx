@@ -55,8 +55,10 @@ function validateAnalysisResponse(data) {
 export default function ResumeOptimizer() {
   const [resume, setResume] = useState(null);
   const [jobDescription, setJobDescription] = useState('');
+  const [jobDescriptionUrl, setJobDescriptionUrl] = useState('');
   const [analysisResult, setAnalysisResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetchingJobDescription, setIsFetchingJobDescription] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
   const handleResumeChange = (e) => {
@@ -104,6 +106,71 @@ export default function ResumeOptimizer() {
     // Clear error message when user starts typing
     if (errorMessage?.includes('Job description')) {
       setErrorMessage(null);
+    }
+  };
+
+  const handleFetchJobDescription = async (e) => {
+    e.preventDefault();
+
+    const urlToFetch = jobDescriptionUrl.trim();
+    if (!urlToFetch) {
+      setErrorMessage('Please enter a job description URL.');
+      return;
+    }
+
+    // Basic URL validation
+    try {
+      new URL(urlToFetch);
+    } catch {
+      setErrorMessage('Invalid URL. Please enter a valid URL starting with http:// or https://');
+      return;
+    }
+
+    setIsFetchingJobDescription(true);
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/fetch-job-description', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: urlToFetch }),
+        signal: AbortSignal.timeout(30000), // 30 second timeout
+      });
+
+      if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error('Invalid URL. Please check the URL and try again.');
+        }
+        if (response.status === 404) {
+          throw new Error('Job description not found at the provided URL.');
+        }
+        if (response.status === 500) {
+          throw new Error('Server error. Failed to fetch the job description.');
+        }
+        throw new Error(`Server error (${response.status}). Please try again.`);
+      }
+
+      const data = await response.json();
+      if (!data.job_description) {
+        throw new Error('No job description content found in the response.');
+      }
+
+      setJobDescription(data.job_description);
+      setJobDescriptionUrl(''); // Clear the URL field after successful fetch
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        setErrorMessage('Request timeout. The server took too long to respond. Please try again.');
+      } else if (err instanceof TypeError) {
+        setErrorMessage(
+          'Network error. Unable to connect to the server. Please check if the backend is running at http://127.0.0.1:8000'
+        );
+      } else {
+        setErrorMessage(err.message || 'Failed to fetch job description. Please try again.');
+      }
+    } finally {
+      setIsFetchingJobDescription(false);
     }
   };
 
@@ -190,7 +257,7 @@ export default function ResumeOptimizer() {
               accept=".txt,.pdf,.docx"
               onChange={handleResumeChange}
               className="file-input"
-              disabled={isLoading}
+              disabled={isLoading || isFetchingJobDescription}
             />
             {resume && (
               <p className="file-name">✓ {resume.name}</p>
@@ -199,21 +266,42 @@ export default function ResumeOptimizer() {
 
           <div className="form-group">
             <label htmlFor="jobDescription" className="label">Job Description</label>
+            
+            <div className="url-input-group">
+              <input
+                id="jobDescriptionUrl"
+                type="url"
+                value={jobDescriptionUrl}
+                onChange={(e) => setJobDescriptionUrl(e.target.value)}
+                placeholder="Enter job description URL (e.g., https://example.com/job)"
+                className="url-input"
+                disabled={isLoading || isFetchingJobDescription}
+              />
+              <button
+                type="button"
+                onClick={handleFetchJobDescription}
+                className="fetch-button"
+                disabled={isLoading || isFetchingJobDescription}
+              >
+                {isFetchingJobDescription ? 'Fetching...' : 'Fetch'}
+              </button>
+            </div>
+
             <textarea
               id="jobDescription"
               value={jobDescription}
               onChange={handleJobDescriptionChange}
-              placeholder="Paste the job description here..."
+              placeholder="Paste the job description here or fetch from URL above..."
               className="textarea"
               rows="8"
-              disabled={isLoading}
+              disabled={isLoading || isFetchingJobDescription}
             />
           </div>
 
           <button
             type="submit"
             className="button"
-            disabled={isLoading}
+            disabled={isLoading || isFetchingJobDescription}
           >
             {isLoading ? 'Analyzing...' : 'Analyze'}
           </button>
