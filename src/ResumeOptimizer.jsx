@@ -52,6 +52,91 @@ function validateAnalysisResponse(data) {
   return data;
 }
 
+// Helper function to generate report text
+function generateReportText(result) {
+  const score = result.score ?? 0;
+  const timestamp = new Date().toLocaleString();
+  
+  let report = '═══════════════════════════════════════════════════════════\n';
+  report += '          RESUME KEYWORD OPTIMIZATION REPORT\n';
+  report += '═══════════════════════════════════════════════════════════\n\n';
+  
+  report += `Generated: ${timestamp}\n`;
+  report += `Match Score: ${score}%\n\n`;
+  
+  report += '───────────────────────────────────────────────────────────\n';
+  report += 'SCORE SUMMARY\n';
+  report += '───────────────────────────────────────────────────────────\n';
+  
+  if (score >= 80) {
+    report += 'Status: EXCELLENT MATCH\n';
+  } else if (score >= 60) {
+    report += 'Status: GOOD MATCH\n';
+  } else if (score >= 40) {
+    report += 'Status: FAIR MATCH\n';
+  } else {
+    report += 'Status: NEEDS IMPROVEMENT\n';
+  }
+  report += `Your resume matches ${score}% of the keywords in the job description.\n\n`;
+  
+  // Matched Keywords
+  if (result.matched_keywords && result.matched_keywords.length > 0) {
+    report += '───────────────────────────────────────────────────────────\n';
+    report += `MATCHED KEYWORDS (${result.matched_keywords.length})\n`;
+    report += '───────────────────────────────────────────────────────────\n';
+    result.matched_keywords.forEach((keyword, index) => {
+      report += `✓ ${keyword}\n`;
+    });
+    report += '\n';
+  }
+  
+  // Missing Keywords
+  if (result.missing_keywords && result.missing_keywords.length > 0) {
+    report += '───────────────────────────────────────────────────────────\n';
+    report += `MISSING KEYWORDS (${result.missing_keywords.length})\n`;
+    report += '───────────────────────────────────────────────────────────\n';
+    report += 'Add these keywords to improve your match score:\n\n';
+    result.missing_keywords.forEach((keyword, index) => {
+      report += `+ ${keyword}\n`;
+    });
+    report += '\n';
+  }
+  
+  // Suggestions
+  if (result.suggestions && result.suggestions.length > 0) {
+    report += '───────────────────────────────────────────────────────────\n';
+    report += 'SUGGESTIONS FOR IMPROVEMENT\n';
+    report += '───────────────────────────────────────────────────────────\n';
+    result.suggestions.forEach((suggestion, index) => {
+      report += `${index + 1}. ${suggestion}\n`;
+    });
+    report += '\n';
+  }
+  
+  report += '═══════════════════════════════════════════════════════════\n';
+  report += 'End of Report\n';
+  report += '═══════════════════════════════════════════════════════════\n';
+  
+  return report;
+}
+
+// Helper function to download report
+function downloadReport(result) {
+  const reportText = generateReportText(result);
+  const timestamp = new Date().toISOString().split('T')[0];
+  const filename = `Resume_Analysis_Report_${timestamp}.txt`;
+  
+  const blob = new Blob([reportText], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
 export default function ResumeOptimizer() {
   const [resume, setResume] = useState(null);
   const [jobDescription, setJobDescription] = useState('');
@@ -337,6 +422,17 @@ function AnalysisResultsDisplay({ result }) {
 
   return (
     <div className="results">
+      <div className="download-button-container">
+        <button 
+          onClick={() => downloadReport(result)}
+          className="download-button"
+          title="Download your analysis report as a text file"
+        >
+          <span className="download-icon">⬇</span>
+          Download Report
+        </button>
+      </div>
+
       <div className="score-card" style={{ background: scoreDisplay.background }}>
         <p className="score-label">{scoreDisplay.label}</p>
         <div className="score-circle">
