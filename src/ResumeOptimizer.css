@@ -1,10 +1,14 @@
 .resume-optimizer {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 40px 20px;
+  padding: 16px 12px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .container {
@@ -13,71 +17,86 @@
   background: white;
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  padding: 40px;
+  padding: 24px 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 h1 {
   text-align: center;
   color: #333;
-  margin: 0 0 10px 0;
-  font-size: 32px;
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 700;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .subtitle {
   text-align: center;
   color: #666;
-  margin: 0 0 30px 0;
-  font-size: 16px;
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  margin-bottom: 30px;
+  gap: 20px;
+  margin-bottom: 24px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .label {
   font-weight: 600;
   color: #333;
-  font-size: 14px;
+  font-size: 13px;
+  text-transform: capitalize;
 }
 
 .file-input,
 .textarea {
-  padding: 12px;
+  padding: 11px 10px;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13px;
   font-family: inherit;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .file-input {
-  padding: 12px;
   cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 }
 
 .url-input-group {
   display: flex;
+  flex-direction: column;
   gap: 8px;
   margin-bottom: 8px;
 }
 
 .url-input {
   flex: 1;
-  padding: 12px;
+  padding: 11px 10px;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13px;
   font-family: inherit;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
 }
 
 .url-input:hover:not(:disabled),
@@ -111,16 +130,21 @@ h1 {
 }
 
 .fetch-button {
-  padding: 12px 20px;
+  padding: 11px 14px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   white-space: nowrap;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .fetch-button:hover:not(:disabled) {
@@ -138,27 +162,34 @@ h1 {
 }
 
 .file-name {
-  font-size: 13px;
+  font-size: 12px;
   color: #4caf50;
-  margin: 0;
+  margin: 4px 0 0 0;
   font-weight: 500;
 }
 
 .textarea {
   resize: vertical;
-  min-height: 150px;
+  min-height: 140px;
+  line-height: 1.4;
 }
 
 .button {
-  padding: 12px 24px;
+  padding: 12px 20px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .button:hover:not(:disabled) {
@@ -176,30 +207,30 @@ h1 {
 
 .loading {
   text-align: center;
-  padding: 40px 20px;
+  padding: 32px 16px;
   background: #f8f9ff;
   border-radius: 12px;
   border: 2px dashed #c5cae9;
-  margin-top: 24px;
+  margin-top: 20px;
 }
 
 .loading-text {
   color: #3949ab;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  margin: 0 0 6px 0;
+  margin: 0 0 4px 0;
 }
 
 .loading-subtext {
   color: #888;
-  font-size: 13px;
+  font-size: 12px;
   margin: 0;
 }
 
 .spinner {
   width: 44px;
   height: 44px;
-  margin: 0 auto 20px;
+  margin: 0 auto 16px;
   border: 4px solid #e8eaf6;
   border-top: 4px solid #3949ab;
   border-radius: 50%;
@@ -215,15 +246,17 @@ h1 {
   background-color: #ffebee;
   border-left: 4px solid #f44336;
   color: #c62828;
-  padding: 14px 16px;
+  padding: 12px 12px;
   border-radius: 6px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  font-size: 14px;
+  gap: 10px;
+  font-size: 13px;
   line-height: 1.5;
   animation: slideDown 0.3s ease;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 @keyframes slideDown {
@@ -238,9 +271,9 @@ h1 {
 }
 
 .error-icon {
-  font-size: 18px;
+  font-size: 16px;
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .results {
@@ -261,23 +294,27 @@ h1 {
 .download-button-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .download-button {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 16px;
   background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 4px 12px rgba(67, 160, 71, 0.3);
+  min-height: 44px;
+  width: 100%;
+  max-width: 280px;
 }
 
 .download-button:hover {
@@ -290,48 +327,48 @@ h1 {
 }
 
 .download-icon {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .score-card {
   text-align: center;
-  padding: 36px 30px;
+  padding: 28px 20px;
   border-radius: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .score-label {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin: 0 0 20px 0;
+  letter-spacing: 1.2px;
+  margin: 0 0 16px 0;
 }
 
 .score-circle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 130px;
-  height: 130px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   border: 3px solid rgba(255, 255, 255, 0.4);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .score-sublabel {
   color: rgba(255, 255, 255, 0.75);
-  font-size: 13px;
+  font-size: 12px;
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
 }
 
 .score-value {
-  font-size: 52px;
+  font-size: 44px;
   font-weight: 800;
   color: white;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -339,20 +376,22 @@ h1 {
 }
 
 .keywords-section {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   background: #fafafa;
   border-radius: 12px;
-  padding: 20px 24px;
+  padding: 16px;
   border: 1px solid #eeeeee;
 }
 
 .section-title {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  margin: 0 0 14px 0;
+  gap: 6px;
+  font-size: 14px;
+  margin: 0 0 12px 0;
   font-weight: 700;
+  flex-wrap: wrap;
+  row-gap: 6px;
 }
 
 .matched-title {
@@ -364,17 +403,19 @@ h1 {
 }
 
 .section-icon {
-  font-size: 16px;
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
 .keyword-count {
   margin-left: auto;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   background: #e8f5e9;
   color: #2e7d32;
   padding: 2px 8px;
   border-radius: 12px;
+  flex-shrink: 0;
 }
 
 .keyword-count.missing-count {
@@ -384,30 +425,33 @@ h1 {
 
 .missing-keywords-hint {
   color: #666;
-  font-size: 13px;
-  margin: 0 0 12px 0;
+  font-size: 12px;
+  margin: 0 0 10px 0;
   font-style: italic;
 }
 
 .keywords-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
 }
 
 .keyword {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
+  gap: 4px;
+  padding: 6px 11px;
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   transition: all 0.2s ease;
   cursor: default;
   white-space: nowrap;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .keyword:hover {
@@ -442,10 +486,10 @@ h1 {
 }
 
 .suggestions-section {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   background: #fafafa;
   border-radius: 12px;
-  padding: 20px 24px;
+  padding: 16px;
   border: 1px solid #eeeeee;
 }
 
@@ -456,37 +500,402 @@ h1 {
 .suggestion-item {
   background-color: white;
   border-left: 4px solid #1976d2;
-  padding: 12px 14px;
-  margin-bottom: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.5;
   color: #333;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .suggestion-item:last-child {
   margin-bottom: 0;
 }
 
-@media (max-width: 600px) {
+/* Responsive Design - Mobile First */
+
+/* Small Mobile Phones (up to 380px) */
+@media (max-width: 380px) {
+  .resume-optimizer {
+    padding: 12px 8px;
+  }
+
   .container {
-    padding: 24px;
+    padding: 16px 12px;
+    border-radius: 10px;
   }
 
   h1 {
-    font-size: 24px;
+    font-size: 20px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+
+  .form {
+    gap: 16px;
+  }
+
+  .label {
+    font-size: 12px;
+  }
+
+  .file-input,
+  .textarea,
+  .url-input {
+    font-size: 12px;
+    padding: 10px 8px;
+  }
+
+  .fetch-button {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+
+  .button {
+    font-size: 13px;
+  }
+
+  .score-value {
+    font-size: 38px;
+  }
+
+  .section-title {
+    font-size: 13px;
+  }
+
+  .keyword {
+    padding: 5px 9px;
+    font-size: 11px;
+  }
+
+  .suggestion-item {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .error-message {
+    font-size: 12px;
+    padding: 10px 10px;
+  }
+}
+
+/* Mobile Phones (380px - 480px) */
+@media (min-width: 381px) and (max-width: 480px) {
+  .resume-optimizer {
+    padding: 14px 10px;
+  }
+
+  .container {
+    padding: 20px 14px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .form {
+    gap: 18px;
+  }
+
+  .score-value {
+    font-size: 40px;
+  }
+
+  .section-title {
+    font-size: 13px;
+  }
+
+  .keyword {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  .suggestion-item {
+    font-size: 12px;
+  }
+
+  .error-message {
+    font-size: 12px;
+  }
+}
+
+/* Tablets (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .resume-optimizer {
+    padding: 20px 14px;
+  }
+
+  .container {
+    padding: 28px 20px;
+    max-width: 720px;
+  }
+
+  h1 {
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+
+  .form {
+    gap: 20px;
+  }
+
+  .label {
+    font-size: 13px;
+  }
+
+  .file-input,
+  .textarea,
+  .url-input {
+    font-size: 13px;
+    padding: 11px 10px;
+    min-height: 42px;
+  }
+
+  .fetch-button {
+    font-size: 13px;
+    padding: 11px 14px;
+    min-height: 42px;
+  }
+
+  .button {
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  .url-input-group {
+    flex-direction: row;
+  }
+
+  .fetch-button {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .score-card {
+    padding: 32px 24px;
+    margin-bottom: 28px;
+  }
+
+  .score-circle {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 15px;
   }
 
   .score-value {
     font-size: 48px;
   }
 
+  .keywords-section,
+  .suggestions-section {
+    padding: 18px 20px;
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-size: 15px;
+    margin-bottom: 13px;
+  }
+
+  .keyword {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .suggestion-item {
+    font-size: 13px;
+    padding: 11px 13px;
+    margin-bottom: 9px;
+  }
+
   .download-button {
-    padding: 10px 20px;
+    font-size: 13px;
+    padding: 11px 18px;
+    max-width: none;
+  }
+
+  .error-message {
+    font-size: 13px;
+    padding: 13px 13px;
+  }
+
+  .loading {
+    padding: 36px 20px;
+  }
+
+  .loading-text {
+    font-size: 15px;
+  }
+}
+
+/* Desktops (769px and above) */
+@media (min-width: 769px) {
+  .resume-optimizer {
+    padding: 40px 20px;
+  }
+
+  .container {
+    padding: 40px;
+    max-width: 900px;
+  }
+
+  h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+
+  .form {
+    gap: 24px;
+    margin-bottom: 30px;
+  }
+
+  .form-group {
+    gap: 8px;
+  }
+
+  .label {
+    font-size: 14px;
+  }
+
+  .file-input,
+  .textarea,
+  .url-input {
+    font-size: 14px;
+    padding: 12px;
+    min-height: auto;
+  }
+
+  .fetch-button,
+  .button {
+    font-size: 14px;
+    padding: 12px 20px;
+    min-height: auto;
+    width: auto;
+  }
+
+  .button {
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+
+  .url-input-group {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .fetch-button {
+    padding: 12px 20px;
+    width: auto;
+  }
+
+  .textarea {
+    min-height: 150px;
+  }
+
+  .score-card {
+    padding: 36px 30px;
+    margin-bottom: 32px;
+  }
+
+  .score-circle {
+    width: 130px;
+    height: 130px;
+    margin-bottom: 16px;
+  }
+
+  .score-label {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .score-value {
+    font-size: 52px;
+  }
+
+  .score-sublabel {
     font-size: 13px;
   }
 
-  .download-icon {
+  .keywords-section,
+  .suggestions-section {
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+
+  .section-title {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  .keyword-count {
+    font-size: 12px;
+  }
+
+  .keyword {
+    padding: 8px 14px;
+    font-size: 13px;
+    gap: 6px;
+  }
+
+  .missing-keywords-hint {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .suggestion-item {
     font-size: 14px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+
+  .download-button-container {
+    margin-bottom: 24px;
+  }
+
+  .download-button {
+    padding: 12px 24px;
+    font-size: 14px;
+    width: auto;
+    max-width: none;
+  }
+
+  .error-message {
+    font-size: 14px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+
+  .loading {
+    padding: 40px 20px;
+    margin-top: 24px;
+  }
+
+  .loading-text {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+
+  .loading-subtext {
+    font-size: 13px;
   }
 }
