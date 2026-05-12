@@ -1,6 +1,35 @@
 import { useState } from 'react';
 import './ResumeOptimizer.css';
 
+// API Configuration
+const API_ENDPOINTS = {
+  ANALYZE: 'http://127.0.0.1:8000/analyze',
+  FETCH_JOB_DESCRIPTION: 'http://127.0.0.1:8000/fetch-job-description',
+};
+
+const API_TIMEOUT = 30000; // 30 seconds
+
+// Helper function to create a timeout promise with AbortController
+// Provides fallback for browsers that don't support AbortSignal.timeout()
+function createTimeoutSignal(ms) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), ms);
+  
+  // Store timeout ID to clear if request completes before timeout
+  if (!controller.timeoutId) {
+    controller.timeoutId = timeoutId;
+  }
+  
+  return { controller, timeoutId };
+}
+
+// Helper function to clean up timeout
+function clearTimeout(timeoutId) {
+  if (timeoutId) {
+    globalThis.clearTimeout(timeoutId);
+  }
+}
+
 // Helper function to determine score label and background gradient
 function getScoreDisplay(score) {
   if (score >= 80) {
@@ -122,19 +151,24 @@ function generateReportText(result) {
 
 // Helper function to download report
 function downloadReport(result) {
-  const reportText = generateReportText(result);
-  const timestamp = new Date().toISOString().split('T')[0];
-  const filename = `Resume_Analysis_Report_${timestamp}.txt`;
-  
-  const blob = new Blob([reportText], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  try {
+    const reportText = generateReportText(result);
+    const timestamp = new Date().toISOString().split('T')[0];
+    const filename = `Resume_Analysis_Report_${timestamp}.txt`;
+    
+    const blob = new Blob([reportText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error('Error downloading report:', err);
+    alert('Failed to download report. Please try again.');
+  }
 }
 
 export default function ResumeOptimizer() {
@@ -214,15 +248,22 @@ export default function ResumeOptimizer() {
     setIsFetchingJobDescription(true);
     setErrorMessage(null);
 
+    let timeoutId;
     try {
-      const response = await fetch('http://127.0.0.1:8000/fetch-job-description', {
+      // Use AbortController for timeout with fallback implementation
+      const { controller, timeoutId: id } = createTimeoutSignal(API_TIMEOUT);
+      timeoutId = id;
+
+      const response = await fetch(API_ENDPOINTS.FETCH_JOB_DESCRIPTION, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ url: urlToFetch }),
-        signal: AbortSignal.timeout(30000), // 30 second timeout
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         if (response.status === 400) {
@@ -245,6 +286,8 @@ export default function ResumeOptimizer() {
       setJobDescription(data.job_description);
       setJobDescriptionUrl(''); // Clear the URL field after successful fetch
     } catch (err) {
+      clearTimeout(timeoutId);
+      
       if (err.name === 'AbortError') {
         setErrorMessage('Request timeout. The server took too long to respond. Please try again.');
       } else if (err instanceof TypeError) {
@@ -284,16 +327,25 @@ export default function ResumeOptimizer() {
     setErrorMessage(null);
     setIsLoading(true);
 
+    let timeoutId;
     try {
+      // Create FormData with exact key names: resume and job_description
+      // This matches the backend API contract
       const formData = new FormData();
       formData.append('resume', resume);
       formData.append('job_description', trimmedDescription);
 
-      const response = await fetch('http://127.0.0.1:8000/analyze', {
+      // Use AbortController for timeout with fallback implementation
+      const { controller, timeoutId: id } = createTimeoutSignal(API_TIMEOUT);
+      timeoutId = id;
+
+      const response = await fetch(API_ENDPOINTS.ANALYZE, {
         method: 'POST',
         body: formData,
-        signal: AbortSignal.timeout(30000), // 30 second timeout
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         if (response.status === 400) {
@@ -312,6 +364,8 @@ export default function ResumeOptimizer() {
       const validatedData = validateAnalysisResponse(data);
       setAnalysisResult(validatedData);
     } catch (err) {
+      clearTimeout(timeoutId);
+      
       if (err.name === 'AbortError') {
         setErrorMessage('Request timeout. The server took too long to respond. Please try again.');
       } else if (err instanceof TypeError) {
